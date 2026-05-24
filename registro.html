@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crear cuenta - Herbalife</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .form-container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0px 10px rgba(0,0,0,0.01);
+      width: 350px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .form-container::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 120px;
+      height: 120px;
+      background: #ecf9ec;
+      border-bottom-right-radius: 100% 80%;
+      z-index: -1;
+    }
+
+    .form-container::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 180px;
+      height: 180px;
+      background: #ecf9ec;
+      border-top-left-radius: 100% 80%;
+      z-index: -1;
+    }
+
+    h2 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 20px;
+      color: #5c5c5c;
+      margin-bottom: 5px;
+    }
+
+    p {
+      font-size: 13px;
+      color: #555;
+      margin-bottom: 20px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 15px 0;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+
+    input:focus {
+      border: 1px solid #4CAF50;
+      outline: none;
+      box-shadow: 0 0 4px rgba(100, 224, 105, 0.5);
+    }
+
+    .note {
+      font-size: 11px;
+      color: #666;
+      margin-top: -5px;
+      margin-bottom: 12px;
+    }
+
+    .captcha {
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 15px 0;
+      background: #f9f9f9;
+    }
+
+    .captcha input {
+      width: auto;
+      margin: 0 10px 0 0;
+    }
+
+    .captcha label { 
+      font-size: 13px;
+      color: #333;
+      flex-grow: 1;
+    }
+
+    .captcha img {
+      height: 30px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      background: #4CAF50;
+      color: white;
+      font-size: 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background: #095f00;
+    }
+
+    .redirect {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 13px;
+    }
+
+    .redirect a {
+      color: #4CAF50;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .redirect a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="form-container">
+    <h2>Crear una cuenta</h2>
+    <p>Completa los datos para registrarte</p>
+
+    <form id="signupForm" method="POST">
+
+      <input type="text" id="nombreApellido" name="nombreApellido" placeholder="Nombre completo*" required>
+
+      <input type="email" id="correo" name="correoElectronico" placeholder="Correo electrónico*" required>
+
+      <input type="email" id="confirmarCorreo" name="confirmarCorreo" placeholder="Confirmar correo*" required>
+
+      <input type="text" id="telefono" name="telefono" placeholder="Teléfono*" required>
+
+      <input type="password" id="contrasena" name="contrasena" placeholder="Contraseña*" required minlength="8">
+
+      <input type="password" id="confirmarContrasena" name="confirmarContrasena" placeholder="Confirmar contraseña*" required>
+
+      <div class="note">
+        La contraseña debe tener mínimo 8 caracteres.
+      </div>
+
+      <div class="captcha">
+        <input type="checkbox" id="notrobot" required>
+        <label for="notrobot">No soy un robot</label>
+      </div>
+
+      <p style="font-size:12px; color:#444; line-height: 1.4;">
+        Creando una cuenta, estás de acuerdo con los
+        <a href="#" style="color:#4890ef;">Términos y Condiciones de Uso</a>
+        y la <a href="#" style="color:#4890ef;">Política de Privacidad</a>.
+      </p>
+
+      <button type="submit">Crear cuenta</button>
+
+    </form>
+
+    <div class="redirect">
+      ¿Ya tienes cuenta? <a href="login.html">Inicia sesión aquí</a>
+    </div>
+  </div>
+
+</body>
+
+<script>
+document.getElementById("signupForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
+
+    const nombre = document.getElementById("nombreApellido").value;
+    const correo = document.getElementById("correo").value;
+    const confirmarCorreo = document.getElementById("confirmarCorreo").value;
+    const telefono = document.getElementById("telefono").value;
+    const contrasena = document.getElementById("contrasena").value;
+    const confirmarContrasena = document.getElementById("confirmarContrasena").value;
+    const check = document.getElementById("notrobot");
+
+    if (!check.checked) {
+        alert("Por favor confirma que no eres un robot");
+        return;
+    }
+
+    if (correo !== confirmarCorreo) {
+        alert("Los correos no coinciden");
+        return;
+    }
+
+    if (contrasena !== confirmarContrasena) {
+        alert("Las contraseñas no coinciden");
+        return;
+    }
+
+    try {
+        const respuesta = await fetch("http://127.0.0.1:3000/api/registro", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                nombreApellido: nombre,
+                correoElectronico: correo,
+                telefono: telefono,
+                contrasena: contrasena
+            })
+        });
+
+        const data = await respuesta.json();
+
+        if (data.success) {
+            alert("✅ Cuenta creada correctamente");
+            window.location.href = "login.html";
+        } else {
+            alert("Error al registrar");
+        }
+
+    } catch (error) {
+        console.error(error);
+        alert("No se pudo conectar con el servidor");
+    }
+});
+</script>
+
+</body>
+</html>
