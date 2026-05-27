@@ -22,9 +22,11 @@
       padding: 30px;
       border-radius: 10px;
       box-shadow: 0 0px 10px rgba(0,0,0,0.01);
-      width: 350px;
+      width: 100%;
+      max-width: 420px;
       position: relative;
       overflow: hidden;
+      margin: 30px auto;
     }
 
     .form-container::before {
@@ -66,11 +68,12 @@
 
     input {
       width: 100%;
-      padding: 10px;
-      margin: 15px 0;
+      padding: 12px;
+      margin: 12px 0;
       border-radius: 6px;
       border: 1px solid #ccc;
       font-size: 14px;
+      box-sizing: border-box;
     }
 
     input:focus {
@@ -143,6 +146,46 @@
     .redirect a:hover {
       text-decoration: underline;
     }
+
+  @media (max-width: 768px) {
+    
+  body {
+    padding: 15px;
+    display:block;
+    height: auto;
+  }
+
+  .form-container {
+    width: 100%;
+    max-width: 420px;
+    padding: 25px 20px;
+    margin: 20px auto;
+  }
+
+  h2 {
+    font-size: 22px;
+    text-align: center;
+  }
+
+  p {
+    text-align: center;
+  }
+
+  .captcha {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap:nowrap;
+  }
+
+  .captcha label {
+    font-size: 14px;
+  }
+
+  button {
+    width: 100%;
+  }
+}
   </style>
 </head>
 <body>
