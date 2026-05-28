@@ -2,6 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
+from datetime import datetime
 import time
 
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
@@ -41,11 +42,17 @@ time.sleep(2)
 
 # Capturar alerta
 alerta = driver.switch_to.alert
-
 print("Mensaje alerta:", alerta.text)
 
+#Nombre automático con fecha y hora
+nombre_archivo = f"CP-003_Correos_Diferentes_{datetime.now().strftime('%Y-%m-%d_%H-%M-%S.png')}.png"
+
+ruta = fr"C:\Users\porte\OneDrive\Pictures\Screenshots 1\{nombre_archivo}"
+
 # Screenshot evidencia
-driver.save_screenshot("CP-004.png")
+driver.save_screenshot (ruta)
+
+print(f"Captura guardada en: {ruta}")
 
 # Aceptar alerta
 alerta.accept()

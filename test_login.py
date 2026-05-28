@@ -2,6 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
+from datetime import datetime
 import time
 
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
@@ -29,7 +30,15 @@ else:
 
 time.sleep(2)
 
-driver.save_screenshot("login_exitoso.png")
+# Nombre automático con fecha y hora
+nombre_archivo = f"CP-001_Login_{datetime.now().strftime("%Y-%m-%d_%H-%M-%S.png")}.png"
+
+ruta = fr"C:\Users\porte\OneDrive\Pictures\Screenshots 1\{nombre_archivo}"
+
+# Screenshot evidencia
+driver.save_screenshot(ruta)
+
+print(f"Captura guardada en: {ruta}")
 
 # CERRAR NAVEGADOR
 driver.quit()
