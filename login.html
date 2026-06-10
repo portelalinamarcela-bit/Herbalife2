@@ -152,11 +152,15 @@ document.getElementById("loginForm").addEventListener("submit", async function(e
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                correo: correo,
-                contrasena: contrasena
+                correo,
+                contrasena
             })
         });
-
+        
+        if (!respuesta.ok) {
+            throw new Error("Error en servidor");
+        }
+        
         const data = await respuesta.json();
 
         console.log("Respuesta recibida:", data);
