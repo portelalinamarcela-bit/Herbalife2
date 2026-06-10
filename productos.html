@@ -282,64 +282,88 @@
       <input type="text" id="buscar" placeholder="Buscar producto...">
       <button onclick="buscarProducto()">Buscar</button>
     </div>
-
-    <div class="grid-productos" id="listaProductos">
-      <div class="producto">
-        <img src="./img/batido_nutricional.webp" alt="Batido Café Latte">
-        <h3>Batido Nutricional Café Latte</h3>
-        <p>Delicioso batido con proteínas y nutrientes esenciales.</p>
-        <p class="precio">$85.000 COP</p>
-        <button onclick="window.location.href='login.html'">
-          Comprar
-        </button>
-      </div>
-
-      <div class="producto">
-        <img src="./img/te_concentrado.webp" alt="Té Concentrado de Hierbas">
-        <h3>Té Concentrado Herbal</h3>
-        <p>Bebida refrescante con extracto natural de hierbas.</p>
-        <p class="precio">$60.000 COP</p>
-        <button onclick="window.location.href='login.html'">
-          Comprar
-        </button>
-      </div>
-
-      <div class="producto">
-        <img src="./img/collagen_plus_powder.webp" alt="Colágeno Plus">
-        <h3>Colágeno Plus</h3>
-        <p>Fórmula avanzada para el cuidado de tu piel y articulaciones.</p>
-        <p class="precio">$95.000 COP</p>
-        <button onclick="window.location.href='login.html'">
-          Comprar
-        </button>
-      </div>
-
-      <div class="producto">
-        <img src="./img/crema_cuidado_personal.webp" alt="Crema Corporal">
-        <h3>Crema Corporal Natural</h3>
-        <p>Hidrata y suaviza tu piel con extractos naturales.</p>
-        <p class="precio">$70.000 COP</p>
-        <button onclick="window.location.href='login.html'">
-          Comprar
-        </button>
-      </div>
-    </div>
+    
+    <div class="grid-productos" id="listaProductos"></div>
   </main>
 
   <footer>
     <p>&copy; 2025 Herbalife - Proyecto Formativo</p>
   </footer>
-
+  
   <script>
-    function buscarProducto() {
-      const input = document.getElementById("buscar").value.toLowerCase();
-      const productos = document.querySelectorAll(".producto");
-      productos.forEach(p => {
-        const nombre = p.querySelector("h3").textContent.toLowerCase();
-        p.style.display = nombre.includes(input) ? "block" : "none";
-      });
+
+async function cargarProductos() {
+
+    try {
+
+        const respuesta = await fetch(
+            "https://herbalife-backend-production.up.railway.app/api/productos"
+        );
+
+        const productos = await respuesta.json();
+
+        const contenedor =
+            document.getElementById("listaProductos");
+
+        contenedor.innerHTML = "";
+
+        productos.forEach(producto => {
+
+            contenedor.innerHTML += `
+                <div class="producto">
+                    <img src="./img/${producto.imagen}"
+                         alt="${producto.nombreProducto}">
+
+                    <h3>${producto.nombreProducto}</h3>
+
+                    <p>${producto.descripcion}</p>
+
+                    <p class="precio">
+                        $${Number(producto.precio).toLocaleString("es-CO")} COP
+                    </p>
+
+                    <button onclick="window.location.href='login.html'">
+                        Comprar
+                    </button>
+                </div>
+            `;
+        });
+
+    } catch (error) {
+        console.error(error);
     }
-  </script>
+
+}
+
+function buscarProducto() {
+
+    const input =
+        document.getElementById("buscar")
+        .value
+        .toLowerCase();
+
+    const productos =
+        document.querySelectorAll(".producto");
+
+    productos.forEach(producto => {
+
+        const nombre =
+            producto.querySelector("h3")
+            .textContent
+            .toLowerCase();
+
+        producto.style.display =
+            nombre.includes(input)
+            ? "block"
+            : "none";
+
+    });
+
+}
+
+cargarProductos();
+
+</script>
 
 </body>
 </html>

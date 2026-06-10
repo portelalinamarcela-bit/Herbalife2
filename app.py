@@ -8,7 +8,6 @@ import mysql.connector
 app = Flask(__name__)
 CORS(app)
 
-# conexión a MySQL
 conexion = mysql.connector.connect(
     host="localhost",
     user="root",
@@ -71,6 +70,89 @@ def registro():
     """
 
     cursor.execute(query, (nombre, correo, hash_password, telefono))
+    conexion.commit()
+
+    return jsonify({"success": True})
+
+# PRODUCTOS - AGREGAR
+@app.route('/api/productos', methods=['POST'])
+def agregar_producto():
+
+    data = request.get_json()
+
+    nombre = data.get('nombreProducto')
+    descripcion = data.get('descripcion')
+    imagen = data.get('imagen')
+    porcion = data.get('porcion')
+    precio = data.get('precio')
+    id_categoria = data.get('id_categoria')
+
+    cursor = conexion.cursor()
+
+    query = """
+    INSERT INTO productos
+    (nombreProducto, descripcion, imagen, porcion, precio, id_categoria)
+    VALUES (%s, %s, %s, %s, %s, %s)
+    """
+
+    cursor.execute(
+        query,
+        (nombre, descripcion, imagen, porcion, precio, id_categoria)
+    )
+
+    conexion.commit()
+
+    return jsonify({"success": True})
+
+# PRODUCTOS - LISTAR
+@app.route('/api/productos', methods=['GET'])
+def obtener_productos():
+
+    cursor = conexion.cursor(dictionary=True)
+
+    query = """
+    SELECT p.*, c.nombre
+    FROM productos p
+    INNER JOIN categoria c
+    ON p.id_categoria = c.id_categoria
+    """
+
+    cursor.execute(query)
+
+    productos = cursor.fetchall()
+
+    return jsonify(productos)
+
+# PEDIDOS - REGISTRAR
+@app.route('/api/pedidos', methods=['POST'])
+def crear_pedido():
+
+    data = request.get_json()
+
+    id_usuario = data.get('id_usuario')
+    total = data.get('total')
+    ubicacion = data.get('ubicacion')
+    metodo_pago = data.get('metodo_pago')
+
+    cursor = conexion.cursor()
+
+    query = """
+    INSERT INTO pedido
+    (id_usuario, fecha, estado, total, ubicacion, metodo_pago)
+    VALUES (%s, NOW(), %s, %s, %s, %s)
+    """
+
+    cursor.execute(
+        query,
+        (
+            id_usuario,
+            "Pendiente",
+            total,
+            ubicacion,
+            metodo_pago
+        )
+    )
+
     conexion.commit()
 
     return jsonify({"success": True})

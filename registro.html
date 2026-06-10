@@ -262,7 +262,7 @@ document.getElementById("signupForm").addEventListener("submit", async function(
     }
 
     try {
-        const respuesta = await fetch("http://127.0.0.1:3000/api/registro", {
+        const respuesta = await fetch("https://herbalife-backend-production.up.railway.app/api/registro", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
