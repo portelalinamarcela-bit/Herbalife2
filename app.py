@@ -3,29 +3,33 @@ print("ESTE ES MI APP CORRECTO")
 from werkzeug.security import check_password_hash, generate_password_hash
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import mysql.connector
+from conexion import connection
 
 app = Flask(__name__)
-CORS(app)
 
-conexion = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="LIMAPO",
-    database="herbalife_db"
-)
+CORS(app, origins=["https://portelalinamarcela-bit.github.io" ])
+
+
+@app.route('/')
+def home():
+    return jsonify({
+        "mensaje": "API funcionando"
+    })
 
 #LOGIN
 @app.route('/api/login', methods=['POST'])
 def login():
+
+    conexion = connection()
+    cursor = conexion.cursor(dictionary=True)
+
     data = request.get_json()
+
     correo = data.get('correo')
     contrasena = data.get('contrasena')
     
     print("Correo recibido:", correo)
     print("Contraseña recibida:", contrasena)
-
-    cursor = conexion.cursor(dictionary=True)
     
     query = "SELECT * FROM usuario WHERE correoElectronico=%s"
     cursor.execute(query, (correo,))
@@ -50,6 +54,10 @@ def login():
 # REGISTRO
 @app.route('/api/registro', methods=['POST'])
 def registro():
+
+    conexion = connection()
+    cursor = conexion.cursor()
+
     data = request.get_json()
 
     nombre = data.get('nombreApellido')
@@ -60,8 +68,6 @@ def registro():
     print("Registrando usuario:", correo)
 
     hash_password = generate_password_hash(contrasena)
-
-    cursor = conexion.cursor()
 
     query = """
     INSERT INTO usuario
@@ -78,6 +84,9 @@ def registro():
 @app.route('/api/productos', methods=['POST'])
 def agregar_producto():
 
+    conexion = connection()
+    cursor = conexion.cursor()
+
     data = request.get_json()
 
     nombre = data.get('nombreProducto')
@@ -86,8 +95,6 @@ def agregar_producto():
     porcion = data.get('porcion')
     precio = data.get('precio')
     id_categoria = data.get('id_categoria')
-
-    cursor = conexion.cursor()
 
     query = """
     INSERT INTO productos
@@ -108,6 +115,7 @@ def agregar_producto():
 @app.route('/api/productos', methods=['GET'])
 def obtener_productos():
 
+    conexion = connection()
     cursor = conexion.cursor(dictionary=True)
 
     query = """
@@ -127,14 +135,15 @@ def obtener_productos():
 @app.route('/api/pedidos', methods=['POST'])
 def crear_pedido():
 
+    conexion = connection()
+    cursor = conexion.cursor()
+
     data = request.get_json()
 
     id_usuario = data.get('id_usuario')
     total = data.get('total')
     ubicacion = data.get('ubicacion')
     metodo_pago = data.get('metodo_pago')
-
-    cursor = conexion.cursor()
 
     query = """
     INSERT INTO pedido
